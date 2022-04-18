@@ -3,6 +3,36 @@ import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/styles.css';
 
+$('#random-button').click(function() {
+  
+  let request = new XMLHttpRequest();
+  const url = `https://api.giphy.com/v1/gifs/random?api_key=${process.env.API_KEY}&tag=&rating=pg`;
+  
+  let response;
+
+  request.onreadystatechange = function () {
+    if (this.readyState === 4 && this.status === 200) {
+      response = JSON.parse(this.responseText);
+      getElements(response);
+    }
+  };
+
+  request.open("GET", url, true);
+  request.send();
+
+  function getElements(response) {
+    let gifs = response.data.images.fixed_width.url;
+    let container = "<img src=" + gifs + "></img>";
+  $('.random-gif-display').html(container);
+  }
+});
+
+
+
+
+
+
+
 $('#search-button').click(function(e) {
   e.preventDefault();
   let gifSearch = $('#gif-search').val().trim();
@@ -35,7 +65,6 @@ $('#search-button').click(function(e) {
   }
 });
 
-
 $('#trendy-button').click(function() {
   
   let request = new XMLHttpRequest();
@@ -52,9 +81,6 @@ $('#trendy-button').click(function() {
 
   request.open("GET", url, true);
   request.send();
-
-  
-  
 
   function getElements(response) {
     let gifs = response.data;
