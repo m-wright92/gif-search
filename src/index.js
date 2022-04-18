@@ -26,14 +26,12 @@ $('#search-button').click(function() {
 
   function getElements(response) {
     let gifs = response.data;
-    let gifList = "<ul>";
-    console.log(gifs);
+    let container = "<ul>";
     gifs.forEach(function (gif) {
-    let src = gif.url;
-    gifList.concat("<li>" + "<img src='" + src + "class='listed-gif' />" + "</li>");
-    console.log(gifList);
+    let src = gif.images.original.url;
+    container += "<li><img src='" + src + "'></li>";
   });
 
-  $('.gif-display').html(gifList + "</ul>");
+  $('.gif-display').html(container + "</ul>");
   }
 });
