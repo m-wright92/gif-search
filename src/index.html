@@ -4,8 +4,16 @@
 </head>
 <body>
   <div class="container">
-    <button type="submit" id="search-button">Search Trending</button> 
+    <form id="search-form">
+      <label for="gif-search">Search for a gif:</label>
+      <input id="gif-search" type="text">
+      <button type="submit" class="btn-success" id="search-button">Enter</button>
+    </form>
+    <div class="search-gif-display"></div>
   </div>
-  <div class="gif-display"></div>
+  <div class="container">
+    <button type="submit" id="trendy-button">Show Trending Top 5:</button>
+    <div class="trendy-gif-display"></div>
+  </div>  
 </body>
 </html>
