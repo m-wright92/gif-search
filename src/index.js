@@ -2,26 +2,10 @@ import $ from 'jquery';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/styles.css';
+import GifRandom from "./js/GifRandom.js";
 
 $('#random-button').click(function() {
-  
-  let promise =  new Promise(function(resolve, reject) {
-    let request = new XMLHttpRequest();
-      const url = `https://api.giphy.com/v1/gifs/random?api_key=${process.env.API_KEY}&tag=&rating=pg`;
-      
-      // let response;
-
-      request.onload = function () {
-        if (this.status === 200) {
-          resolve(request.response);
-        } else  {
-          reject(request.response);
-        }
-      }
-      request.open("GET", url, true);
-      request.send();
-    });
-  
+  let promise = GifRandom.getRandom();
   promise.then(function(response) {
     const body = JSON.parse(response);
     let gifs = body.data.images.fixed_width.url;
@@ -31,7 +15,10 @@ $('#random-button').click(function() {
   }, function(error) {
     $('.showErrors').text(`There was an error processing your request: ${error}`);
   });
-});
+});  
+ 
+  
+
 
 
 $('#search-button').click(function(e) {
