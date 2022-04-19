@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/styles.css';
 import GifRandom from "./js/gifRandom.js";
 import GifTrend from "./js/gifTrend.js";
+import GifSearch from "./js/gifSearch.js";
 
 $('#random-button').click(function() {
   let promise = GifRandom.getRandom();
@@ -23,7 +24,7 @@ $('#trendy-button').click(function() {
   promise.then(function(response) {
     const body = JSON.parse(response);
     let gifs = body.data;
-    let container = "<ul>"
+    let container = "<ul>";
     gifs.forEach(function (gif) {
       let src = gif.images.fixed_width.url;
       container += "<img src='" + src + "'>";
@@ -34,35 +35,22 @@ $('#trendy-button').click(function() {
     $('#showTrendyErrors').text(`There was an error processing your request: ${error}`);
   });
 });  
- 
+
 $('#search-button').click(function(e) {
   e.preventDefault();
   let gifSearch = $('#gif-search').val().trim();
-  let request = new XMLHttpRequest();
-
-  const url = `https://api.giphy.com/v1/gifs/search?api_key=${process.env.API_KEY}&limit=5&offset=0&rating=g&lang=en&q=${gifSearch}`;
-
-  let response;
-
-  request.onreadystatechange = function () {
-    if (this.readyState === 4 && this.status === 200) {
-      response = JSON.parse(this.responseText);
-      getElements(response);
-      console.log(response);
-    }
-  };
-
-  request.open("GET", url, true);
-  request.send();
-
-  function getElements(response) {
-    let images = response.data;
+  let promise = GifSearch.getSearch(gifSearch);
+  promise.then(function(response) {
+    const body = JSON.parse(response);
+    let gifs = body.data;
     let container = "";
-    images.forEach(function (image) {
-    let src = image.images.fixed_width.url;
-    container += "<img src='" + src + "'>";
+    gifs.forEach(function (gif) {
+      let src = gif.images.fixed_width.url;
+      container += "<img src='" + src + "'>";
+    });
+    $('#search-gif-display').html(container);
+    $('#showSearchError').text("");
+  }, function(error) {
+    $('#showSearchError').text(`There was an error processing your request: ${error}`);
   });
-
-  $('#search-gif-display').html(container);
-  }
 });
