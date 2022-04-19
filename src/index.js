@@ -6,6 +6,10 @@ import GifRandom from "./js/gifRandom.js";
 import GifTrend from "./js/gifTrend.js";
 import GifSearch from "./js/gifSearch.js";
 
+function clearFields() {
+  $('#gif-search').val('');
+}
+
 $('#random-button').click(function() {
   let promise = GifRandom.getRandom();
   promise.then(function(response) {
@@ -39,6 +43,7 @@ $('#trendy-button').click(function() {
 $('#search-button').click(function(e) {
   e.preventDefault();
   let gifSearch = $('#gif-search').val().trim();
+  clearFields();
   let promise = GifSearch.getSearch(gifSearch);
   promise.then(function(response) {
     const body = JSON.parse(response);
