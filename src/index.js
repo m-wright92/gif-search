@@ -5,32 +5,33 @@ import './css/styles.css';
 
 $('#random-button').click(function() {
   
-  let request = new XMLHttpRequest();
-  const url = `https://api.giphy.com/v1/gifs/random?api_key=${process.env.API_KEY}&tag=&rating=pg`;
+  let promise =  new Promise(function(resolve, reject) {
+    let request = new XMLHttpRequest();
+      const url = `https://api.giphy.com/v1/gifs/random?api_key=${process.env.API_KEY}&tag=&rating=pg`;
+      
+      // let response;
+
+      request.onload = function () {
+        if (this.status === 200) {
+          resolve(request.response);
+        } else  {
+          reject(request.response);
+        }
+      }
+      request.open("GET", url, true);
+      request.send();
+    });
   
-  let response;
-
-  request.onreadystatechange = function () {
-    if (this.readyState === 4 && this.status === 200) {
-      response = JSON.parse(this.responseText);
-      getElements(response);
-    }
-  };
-
-  request.open("GET", url, true);
-  request.send();
-
-  function getElements(response) {
-    let gifs = response.data.images.fixed_width.url;
+  promise.then(function(response) {
+    const body = JSON.parse(response);
+    let gifs = body.data.images.fixed_width.url;
     let container = "<img src=" + gifs + "></img>";
-  $('.random-gif-display').html(container);
-  }
+    $('.random-gif-display').html(container);
+    $('.showErrors').text("");
+  }, function(error) {
+    $('.showErrors').text(`There was an error processing your request: ${error}`);
+  });
 });
-
-
-
-
-
 
 
 $('#search-button').click(function(e) {
